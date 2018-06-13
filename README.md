@@ -28,3 +28,4 @@ Create and style more components, based on the `chat-static` content. There shou
 * When `state.user` is set, show the `Main` component.
 
 _Hint_: You need to figure out how to do **conditional rendering**.
+# chatarang
