@@ -10,18 +10,36 @@ class Chat extends Component {
     super()
 
     this.state = {
-      messages: []
+      rebaseBinding : null,
+      messages: [],
     }
   }
 
-  componentDidMount() {
-    base.syncState(`${this.props.room.name}/messages`, {
+
+
+  componentDidMount(){
+    this.syncMessages()
+  }
+  componentDidUpdate(prevProps){
+    if (prevProps.room.name !== this.props.room.name){
+      this.syncMessages()
+    }
+  }
+
+  syncMessages = () => {
+    if (this.state.rebaseBinding){
+      base.removeBinding(this.state.rebaseBinding)
+    }
+    const rebaseBinding = base.syncState(`${this.props.room.name}/messages`, {
       context: this,
       state: 'messages',
       asArray: true,
     })
+    this.setState({rebaseBinding})
+
   }
 
+  
   addMessage = (body) => {
     const messages = [...this.state.messages]
     messages.push({
