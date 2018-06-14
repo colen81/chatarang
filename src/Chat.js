@@ -16,12 +16,20 @@ class Chat extends Component {
   }
 
   componentWillMount() {
+    base.syncState('random', {
+      context: this,
+      state: 'messages',
+      asArray: true,
+    })
+  }
+  componentWillReceiveProps() {
     base.syncState('general and messages', {
       context: this,
       state: 'messages',
       asArray: true,
     })
   }
+
 
   addMessage = (body) => {
     const messages = [...this.state.messages]

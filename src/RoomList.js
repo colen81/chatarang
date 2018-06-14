@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
+import { randomBytes } from 'crypto';
 
 const RoomList = () => {
   return (
@@ -12,12 +13,14 @@ const RoomList = () => {
           <a href="#" className={css(styles.link)}>general</a>
         </li>
         <li className={css(styles.item)}>
-          <a href="#" className={css(styles.link)}>random</a>
+          <a href="#" id = 'rando' className={css(styles.link)}>random</a>
         </li>
       </ul>
     </nav>
   )
 }
+
+
 
 const styles = StyleSheet.create({
   nav: {
