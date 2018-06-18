@@ -43,6 +43,7 @@ class App extends Component {
     this.setState({ user })
     localStorage.setItem('user', JSON.stringify(user))
   }
+    
 
   handleUnauth = () => {
     this.setState({ user: {} })
