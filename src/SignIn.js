@@ -24,7 +24,7 @@ class SignIn extends Component {
     auth.signInWithPopup(googleProvider)
     auth.createUserWithEmailAndPassword(this.email,this.password)
   }
-  authenticateFacebook = () =>{
+  authenticateFacebook = () => {
     auth.signInWithPopup(provider)
     auth.createUserWithEmailAndPassword(this.email,this.password)
   }
