@@ -3,22 +3,18 @@ import React from 'react'
 import UserInfo from './UserInfo'
 import RoomList from './RoomList'
 
-const Sidebar = ({ user, signOut, loadRoom }) => {
+const Sidebar = ({ user, signOut, loadRoom, users }) => {
   return (
     <aside
       className="Sidebar"
       style={styles.sidebar}
     >
-      <UserInfo user={user} signOut={signOut} />
-      <h1
-        style={{
-          ...styles.children,
-          ...styles.h1,
-        }}
-      >
-        XTBC 18
-      </h1>
-      <RoomList />
+      <UserInfo
+        user={user}
+        signOut={signOut}
+      />
+      <h1 style={styles.h1}>XTBC 18</h1>
+      <RoomList users={users} />
     </aside>
   )
 }
@@ -33,14 +29,11 @@ const styles = {
     flexDirection: 'column',
   },
 
-  children: {
-    padding: '0 1rem',
-  },
-
   h1: {
     color: 'white',
     fontSize: '1.2rem',
     marginTop: 0,
+    padding: '0 1rem',
   },
 }
 
