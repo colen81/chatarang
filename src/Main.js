@@ -5,24 +5,27 @@ import Sidebar from './Sidebar'
 import Chat from './Chat'
 
 class Main extends Component {
-  state = {
-    room: {},
-    rooms: {},
+  constructor() {
+    super()
+
+    this.state = {
+      room: {},
+      rooms: {},
+    }
   }
 
   componentDidMount() {
     const { roomName } = this.props.match.params
-
     base.syncState(
       'rooms',
       {
         context: this,
         state: 'rooms',
-        then: () => this.loadRoom(roomName),
+        then: () => {
+          this.loadRoom(roomName)
+        },
       }
     )
-
-
   }
 
   componentDidUpdate(prevProps) {
@@ -35,13 +38,27 @@ class Main extends Component {
     if (roomName === 'new') return null
 
     const room = this.state.rooms[roomName]
-if (room) {
 
-    this.setState({ room })
-}  else {
-  const realRoomName = Object.keys(this.state.rooms)[0]
-      this.props.history.push(`/rooms/${realRoomName}`)
+    if (room) {
+      this.setState({ room })
+    } else {
+      this.loadValidRoom()
     }
+  }
+
+  removeRoom = (room) => {
+    const rooms = {...this.state.rooms}
+    rooms[room.name] = null
+
+    this.setState(
+      { rooms },
+      this.loadValidRoom,
+    )
+  }
+
+  loadValidRoom = () => {
+    const realRoomName = Object.keys(this.state.rooms)[0]
+    this.props.history.push(`/rooms/${realRoomName}`)
   }
 
   render() {
@@ -54,6 +71,7 @@ if (room) {
         <Chat
           user={this.props.user}
           room={this.state.room}
+          removeRoom={this.removeRoom}
         />
       </div>
     )
