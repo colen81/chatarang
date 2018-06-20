@@ -9,6 +9,7 @@ const Sidebar = ({ user, signOut, users, rooms, addRoom }) => {
     <aside
       className="Sidebar"
       style={styles.sidebar}
+
     >
       <UserInfo user={user} signOut={signOut} />
       <h1
