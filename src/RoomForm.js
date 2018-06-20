@@ -9,18 +9,34 @@ class RoomForm extends Component {
         name: '',
         description: '',
         public: true,
-        users: [],
+        members: [],
     },
+  }
+
+  users = () => {
+    const { users } = this.props
+    delete users[this.props.user.uid]
+
+    return Object.keys(users).map(
+      uid => {
+        const user = users[uid]
+        return {
+          value: uid,
+          label: `${user.displayName} (${user.email})`,
+        }
+      }
+    )
   }
 
   handleSubmit = (ev) => {
     ev.preventDefault()
     this.props.addRoom(this.state.room)
-    this.props.history.push(`/rooms/${this.state.room.name}`)
+    this.props.history.goBack()
   }
 
   handleChange = (ev) => {
     const room = {...this.state.room}
+
     const target = ev.target
     const value = target.type === 'checkbox' ? target.checked : target.value
 
@@ -28,24 +44,11 @@ class RoomForm extends Component {
     this.setState({ room })
   }
 
-  handleSelectChange = (selectedValue) => {
+  handleSelectChange = (selectedOption) => {
     const room = {...this.state.room}
-    room.users = selectedValue
+    room.members = selectedOption
+
     this.setState({ room })
-
-    console.log(selectedValue)
-  }
-
-  users = () => {
-    return Object.keys(this.props.users).map(
-      uid => {
-        const user = this.props.users[uid]
-        return {
-          value: uid,
-          label: `${user.displayName} (${user.email})`,
-        }
-      }
-    )
   }
 
   render() {
@@ -93,21 +96,20 @@ class RoomForm extends Component {
                 onChange={this.handleChange}
               />
             </p>
-
             {
               !this.state.room.public && (
                 <div>
                   <label
-                    htmlFor="users"
+                    htmlFor="members"
                     className={css(styles.label)}
                   >
-                    Users to add
+                    Members
                   </label>
                   <Select
-                    name="users"
                     multi
-                    value={this.state.room.users}
+                    name="members"
                     options={this.users()}
+                    value={this.state.room.members}
                     onChange={this.handleSelectChange}
                   />
                 </div>
