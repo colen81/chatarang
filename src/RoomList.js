@@ -4,43 +4,22 @@ import { Route, Switch, Link } from 'react-router-dom'
 
 import RoomLink from './RoomLink'
 import RoomForm from './RoomForm'
-import base from './base'
 
 class RoomList extends Component {
-  state = {
-    rooms: {},
-  }
-
-  componentDidMount() {
-    base.syncState(
-      'rooms',
-      {
-        context: this,
-        state: 'rooms',
-      }
-    )
-  }
-
-  addRoom = (room) => {
-    const rooms = {...this.state.rooms}
-    rooms[room.name] = room
-    this.setState({ rooms })
-  }
-
   render() {
+    const { rooms } = this.props
+
     return (
       <Switch>
         <Route
           path="/rooms/new"
-          render={
-            navProps => (
-              <RoomForm
-                addRoom={this.addRoom}
-                users={this.props.users}
-                {...navProps}
-              />
-            )
-          }
+          render={navProps => (
+            <RoomForm
+              addRoom={this.props.addRoom}
+              users={this.props.users}
+              {...navProps}
+            />
+          )}
         />
         <Route
           render={
@@ -54,17 +33,19 @@ class RoomList extends Component {
                     className={css(styles.button)}
                     to="/rooms/new"
                   >
-                    <i className="fas fa-plus-circle" title="Add room"></i>
+                    <i className="fas fa-plus-circle"></i>
                   </Link>
                 </div>
                 <ul className={css(styles.list)}>
                   {
-                    Object.keys(this.state.rooms).map(roomName => (
-                      <RoomLink
-                        key={roomName}
-                        room={this.state.rooms[roomName]}
-                      />
-                    ))
+                    Object.keys(rooms).map(
+                      roomName => (
+                        <RoomLink
+                          key={roomName}
+                          room={rooms[roomName]}
+                        />
+                      )
+                    )
                   }
                 </ul>
               </nav>
@@ -102,8 +83,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     outline: 0,
     padding: 0,
+    color: 'rgba(255,255,255,0.4)',
     fontSize: '1rem',
-    color: 'rgba(255,255,255, 0.4)',
     cursor: 'pointer',
     transition: 'color 0.25s ease-out',
 
