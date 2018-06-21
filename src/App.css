@@ -19,7 +19,7 @@ body {
 
 .Select-control {
   border: 0 !important;
-  outline: 0 !important;
+  outline: none !important;
   font-size: 0.8rem;
 }
 
@@ -30,6 +30,6 @@ body {
   text-overflow: ellipsis;
 }
 
-.Select-arrow-zone {
+.Select--multi .Select-arrow-zone {
   opacity: 0;
 }

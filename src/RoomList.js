@@ -13,14 +13,16 @@ class RoomList extends Component {
       <Switch>
         <Route
           path="/rooms/new"
-          render={navProps => (
-            <RoomForm
-              addRoom={this.props.addRoom}
-              users={this.props.users}
-              user={this.props.user}
-              {...navProps}
-            />
-          )}
+          render={
+            navProps => (
+              <RoomForm
+                addRoom={this.props.addRoom}
+                users={this.props.users}
+                user={this.props.user}
+                {...navProps}
+              />
+            )
+          }
         />
         <Route
           render={
@@ -29,7 +31,9 @@ class RoomList extends Component {
                 className={`RoomList ${css(styles.nav)}`}
               >
                 <div className={css(styles.heading)}>
-                  <h2 className={css(styles.h2)}>Rooms</h2>
+                  <h2 className={css(styles.h2)}>
+                    Rooms
+                  </h2>
                   <Link
                     className={css(styles.button)}
                     to="/rooms/new"
@@ -39,14 +43,12 @@ class RoomList extends Component {
                 </div>
                 <ul className={css(styles.list)}>
                   {
-                    Object.keys(rooms).map(
-                      roomName => (
-                        <RoomLink
-                          key={roomName}
-                          room={rooms[roomName]}
-                        />
-                      )
-                    )
+                    Object.keys(rooms).map(roomName => (
+                      <RoomLink
+                        key={roomName}
+                        room={rooms[roomName]}
+                      />
+                    ))
                   }
                 </ul>
               </nav>
@@ -84,8 +86,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     outline: 0,
     padding: 0,
-    color: 'rgba(255,255,255,0.4)',
     fontSize: '1rem',
+    color: 'rgba(255,255,255, 0.4)',
     cursor: 'pointer',
     transition: 'color 0.25s ease-out',
 
@@ -95,4 +97,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RoomList 
+export default RoomList

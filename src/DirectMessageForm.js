@@ -9,9 +9,32 @@ class DirectMessageForm extends Component {
         name: '',
         description: 'Direct message',
         public: false,
-        dm: true,
         members: [],
+        dm: true,
     },
+  }
+
+  handleSubmit = (ev) => {
+    ev.preventDefault()
+    this.props.addRoom(this.state.room)
+    this.props.history.push(`/rooms/${this.state.room.name}`)
+  }
+
+  handleChange = (ev) => {
+    const room = {...this.state.room}
+    const target = ev.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+
+    room[target.name] = value
+    this.setState({ room })
+  }
+
+  handleSelectChange = (selectedValue) => {
+    const room = {...this.state.room}
+    room.members = selectedValue
+    this.setState({ room })
+
+    console.log(selectedValue)
   }
 
   users = () => {
@@ -20,36 +43,13 @@ class DirectMessageForm extends Component {
 
     return Object.keys(users).map(
       uid => {
-        const user = users[uid]
+        const user = this.props.users[uid]
         return {
           value: uid,
           label: `${user.displayName} (${user.email})`,
         }
       }
     )
-  }
-
-  handleSubmit = (ev) => {
-    ev.preventDefault()
-    this.props.addRoom(this.state.room)
-    this.props.history.goBack()
-  }
-
-  handleChange = (ev) => {
-    const room = {...this.state.room}
-
-    const target = ev.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-
-    room[target.name] = value
-    this.setState({ room })
-  }
-
-  handleSelectChange = (selectedOption) => {
-    const room = {...this.state.room}
-    room.members = selectedOption
-
-    this.setState({ room })
   }
 
   render() {
@@ -63,27 +63,24 @@ class DirectMessageForm extends Component {
             className={css(styles.form)}
             onSubmit={this.handleSubmit}
           >
-            {
-              !this.state.room.public && (
-                <div>
-                  <label
-                    htmlFor="members"
-                    className={css(styles.label)}
-                  >
-                    Start a conversation
-                  </label>
-                  <Select
-                    multi
-                    name="members"
-                    options={this.users()}
-                    value={this.state.room.members}
-                    onChange={this.handleSelectChange}
-                    className={css(styles.input)}
-                    placeholder="Invite people..."
-                  />
-                </div>
-              )
-            }
+            <div>
+              <label
+                htmlFor="users"
+                className={css(styles.label)}
+              >
+                Start a conversation
+              </label>
+              <Select
+                name="members"
+                multi
+                value={this.state.room.members}
+                options={this.users()}
+                onChange={this.handleSelectChange}
+                className={css(styles.input)}
+                placeholder="Invite other people..."
+              />
+            </div>
+
             <div className={css(styles.buttonContainer)}>
               <button
                 type="button"
@@ -96,7 +93,7 @@ class DirectMessageForm extends Component {
                 type="submit"
                 className={css(styles.button)}
               >
-                Create Room
+                Go
               </button>
             </div>
           </form>
@@ -109,6 +106,7 @@ class DirectMessageForm extends Component {
 const styles = StyleSheet.create({
   roomForm: {
     position: 'absolute',
+    zIndex: 1000,
     top: 0,
     left: 0,
     height: '100vh',

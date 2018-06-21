@@ -5,7 +5,7 @@ import { Route, Switch, Link } from 'react-router-dom'
 import RoomLink from './RoomLink'
 import DirectMessageForm from './DirectMessageForm'
 
-class DirectMessageList extends Component {
+class RoomList extends Component {
   render() {
     const rooms = this.props.rooms.filter(room => room.dm)
 
@@ -13,14 +13,16 @@ class DirectMessageList extends Component {
       <Switch>
         <Route
           path="/rooms/new-direct-message"
-          render={navProps => (
-            <DirectMessageForm
-              addRoom={this.props.addRoom}
-              users={this.props.users}
-              user={this.props.user}
-              {...navProps}
-            />
-          )}
+          render={
+            navProps => (
+              <DirectMessageForm
+                addRoom={this.props.addRoom}
+                users={this.props.users}
+                user={this.props.user}
+                {...navProps}
+              />
+            )
+          }
         />
         <Route
           render={
@@ -41,14 +43,12 @@ class DirectMessageList extends Component {
                 </div>
                 <ul className={css(styles.list)}>
                   {
-                    Object.keys(rooms).map(
-                      roomName => (
-                        <RoomLink
-                          key={roomName}
-                          room={rooms[roomName]}
-                        />
-                      )
-                    )
+                    Object.keys(rooms).map(roomName => (
+                      <RoomLink
+                        key={roomName}
+                        room={rooms[roomName]}
+                      />
+                    ))
                   }
                 </ul>
               </nav>
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     outline: 0,
     padding: 0,
-    color: 'rgba(255,255,255,0.4)',
     fontSize: '1rem',
+    color: 'rgba(255,255,255, 0.4)',
     cursor: 'pointer',
     transition: 'color 0.25s ease-out',
 
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default DirectMessageList
+export default RoomList

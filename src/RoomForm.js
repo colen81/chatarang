@@ -9,9 +9,32 @@ class RoomForm extends Component {
         name: '',
         description: '',
         public: true,
-        dm: false,
         members: [],
+        dm: false,
     },
+  }
+
+  handleSubmit = (ev) => {
+    ev.preventDefault()
+    this.props.addRoom(this.state.room)
+    this.props.history.push(`/rooms/${this.state.room.name}`)
+  }
+
+  handleChange = (ev) => {
+    const room = {...this.state.room}
+    const target = ev.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+
+    room[target.name] = value
+    this.setState({ room })
+  }
+
+  handleSelectChange = (selectedValue) => {
+    const room = {...this.state.room}
+    room.members = selectedValue
+    this.setState({ room })
+
+    console.log(selectedValue)
   }
 
   users = () => {
@@ -20,36 +43,13 @@ class RoomForm extends Component {
 
     return Object.keys(users).map(
       uid => {
-        const user = users[uid]
+        const user = this.props.users[uid]
         return {
           value: uid,
           label: `${user.displayName} (${user.email})`,
         }
       }
     )
-  }
-
-  handleSubmit = (ev) => {
-    ev.preventDefault()
-    this.props.addRoom(this.state.room)
-    this.props.history.goBack()
-  }
-
-  handleChange = (ev) => {
-    const room = {...this.state.room}
-
-    const target = ev.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-
-    room[target.name] = value
-    this.setState({ room })
-  }
-
-  handleSelectChange = (selectedOption) => {
-    const room = {...this.state.room}
-    room.members = selectedOption
-
-    this.setState({ room })
   }
 
   render() {
@@ -97,23 +97,24 @@ class RoomForm extends Component {
                 onChange={this.handleChange}
               />
             </p>
+
             {
               !this.state.room.public && (
                 <div>
                   <label
-                    htmlFor="members"
+                    htmlFor="users"
                     className={css(styles.label)}
                   >
-                    Members
+                    Users to add
                   </label>
                   <Select
-                    multi
                     name="members"
-                    options={this.users()}
+                    multi
                     value={this.state.room.members}
+                    options={this.users()}
                     onChange={this.handleSelectChange}
                     className={css(styles.input)}
-                    placeholder="Invite people..."
+                    placeholder="Invite other people..."
                   />
                 </div>
               )
@@ -143,6 +144,7 @@ class RoomForm extends Component {
 const styles = StyleSheet.create({
   roomForm: {
     position: 'absolute',
+    zIndex: 1000,
     top: 0,
     left: 0,
     height: '100vh',
@@ -172,7 +174,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     boxShadow: '0 1px 1px rgba(0,0,0,.1)',
     marginBottom: '2rem',
-    padding: '0 2rem 2rem',
+    paddingBottom: '2rem',
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
   },
 
   label: {

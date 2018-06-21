@@ -1,6 +1,12 @@
 import React from 'react'
 
 const ChatHeader = ({ room, removeRoom }) => {
+  const handleClick = (ev) => {
+    if (window.confirm('Are you sure?')) {
+      removeRoom(room)
+    }
+  }
+
   return (
     <div className="ChatHeader" style={styles.header}>
       <div className="roomInfo">
@@ -11,10 +17,9 @@ const ChatHeader = ({ room, removeRoom }) => {
           {room.description}
         </p>
       </div>
-
       <button
         style={styles.button}
-        onClick={() => removeRoom(room)}
+        onClick={handleClick}
       >
         <i className="far fa-trash-alt"></i>
       </button>
@@ -26,7 +31,8 @@ const styles = {
   header: {
     backgroundColor: '#f3f3f3',
     borderBottom: '1px solid #ccc',
-    padding: '0.25rem 1rem',
+    height: '3rem',
+    padding: '0 1rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -46,11 +52,11 @@ const styles = {
   button: {
     border: 0,
     outline: 0,
-    backgroundColor: 'transparent',
     padding: 0,
+    backgroundColor: 'transparent',
     cursor: 'pointer',
-    fontSize: '1rem',
     color: 'rgba(0,0,0, 0.4)',
+    fontSize: '1rem',
   },
 }
 

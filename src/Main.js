@@ -5,20 +5,25 @@ import Sidebar from './Sidebar'
 import Chat from './Chat'
 
 class Main extends Component {
-  state = {
-    room: {},
-    rooms: {},
+  constructor() {
+    super()
+
+    this.state = {
+      room: {},
+      rooms: {},
+    }
   }
 
   componentDidMount() {
     const { roomName } = this.props.match.params
-
     base.syncState(
       'rooms',
       {
         context: this,
         state: 'rooms',
-        then: () => this.loadRoom(roomName),
+        then: () => {
+          this.loadRoom(roomName)
+        },
       }
     )
   }
@@ -36,12 +41,11 @@ class Main extends Component {
 
   filteredRoomNames = () => {
     return Object.keys(this.state.rooms)
-                 .filter(roomName => {
-                   const room = this.state.rooms[roomName]
-                   if (!room) return false
-
-                   return room.public || this.includesCurrentUser(room)
-                 })
+            .filter(roomName => {
+              const room = this.state.rooms[roomName]
+              if (!room) return false
+              return room.public || this.includesCurrentUser(room)
+            })
   }
 
   includesCurrentUser = (room) => {
@@ -64,20 +68,26 @@ class Main extends Component {
     }
   }
 
-  loadValidRoom = () => {
-    const realRoomName = this.filteredRoomNames().find(
-      roomName => this.state.rooms[roomName]
-    )
+  removeRoom = (room) => {
+    const rooms = {...this.state.rooms}
+    rooms[room.name] = null
 
-    this.props.history.push(`/rooms/${realRoomName}`)
+    this.setState(
+      { rooms },
+      this.loadValidRoom,
+    )
   }
 
   addRoom = (room) => {
+    const rooms = {...this.state.rooms}
     const { user } = this.props
+
+    room.displayName = room.name
+
     if (!room.public) {
       room.members.push({
-        value: user.uid,
         label: `${user.displayName} (${user.email})`,
+        value: user.uid,
       })
     }
 
@@ -87,19 +97,16 @@ class Main extends Component {
       room.name = room.members.map(member => member.value).join('-')
     }
 
-    const rooms = {...this.state.rooms}
     rooms[room.name] = room
     this.setState({ rooms })
   }
 
-  removeRoom = (room) => {
-    const rooms = {...this.state.rooms}
-    rooms[room.name] = null
-
-    this.setState(
-      { rooms },
-      this.loadValidRoom
+  loadValidRoom = () => {
+    const realRoomName = this.filteredRoomNames().find(
+      roomName => this.state.rooms[roomName]
     )
+
+    this.props.history.push(`/rooms/${realRoomName}`)
   }
 
   render() {
@@ -107,8 +114,8 @@ class Main extends Component {
       <div className="Main" style={styles}>
         <Sidebar
           user={this.props.user}
-          users={this.props.users}
           signOut={this.props.signOut}
+          users={this.props.users}
           rooms={this.filteredRooms()}
           addRoom={this.addRoom}
         />

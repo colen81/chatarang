@@ -9,17 +9,12 @@ const Sidebar = ({ user, signOut, users, rooms, addRoom }) => {
     <aside
       className="Sidebar"
       style={styles.sidebar}
-
     >
-      <UserInfo user={user} signOut={signOut} />
-      <h1
-        style={{
-          ...styles.children,
-          ...styles.h1,
-        }}
-      >
-        XTBC 18
-      </h1>
+      <UserInfo
+        user={user}
+        signOut={signOut}
+      />
+      <h1 style={styles.h1}>XTBC 18</h1>
       <RoomList
         users={users}
         user={user}
@@ -46,14 +41,11 @@ const styles = {
     flexDirection: 'column',
   },
 
-  children: {
-    padding: '0 1rem',
-  },
-
   h1: {
     color: 'white',
     fontSize: '1.2rem',
     marginTop: 0,
+    padding: '0 1rem',
   },
 }
 
